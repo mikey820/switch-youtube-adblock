@@ -2,7 +2,7 @@
 
 A small, build-specific Atmosphère IPS patch for the official YouTube app on Nintendo Switch. It suppresses video ad placements and removes TV masthead/ad-slot renderers while leaving ordinary player and browse data alone.
 
-The repository contains no Nintendo or YouTube executable—only the original 653-byte IPS32 patch and an optional patch-your-own-NSO tool.
+The repository contains no Nintendo or YouTube executable—only the original 653-byte IPS32 patch and its source.
 
 ## Supported build
 
@@ -12,14 +12,11 @@ The repository contains no Nintendo or YouTube executable—only the original 65
 | Title ID | `01003A400C3DA000` |
 | Build ID | `825C18BBF5008500091842636FC2D8DE` |
 | Original NSO SHA-256 | `33f71d01f6d581cd6148ceb97b2829e211460b69d61db03ede050c1045eda2e2` |
-| Patched NSO SHA-256 | `2f4a7aa4962bcda0131607d799b651fbff570496823de42bd48d13e4c0a640cd` |
 | IPS32 SHA-256 | `1e646449489b3b59475481fcc4f8db84a521458c250f810bf7519a6914ff2bcf` |
 
-The optional NSO patcher checks the complete input hash and fails safely on any other build.
+## Install
 
-## Recommended: install the IPS patch
-
-1. Download `switch-youtube-adblock-atmosphere-v1.1.0.zip` from the [latest release](https://github.com/mikey820/switch-youtube-adblock/releases/latest).
+1. Download the Atmosphère ZIP from the [latest release](https://github.com/mikey820/switch-youtube-adblock/releases/latest).
 2. Fully close YouTube with **HOME → X → Close**.
 3. Extract the ZIP to the root of your Switch SD card.
 4. If you previously installed a full `main` override, rename `SD:/atmosphere/contents/01003A400C3DA000/exefs` to `exefs.disabled`.
@@ -33,48 +30,19 @@ SD:/atmosphere/exefs_patches/YouTubeAdBlock/825C18BBF5008500091842636FC2D8DE.ips
 
 Atmosphère selects the patch by Build ID, so it will not be applied to a different YouTube build.
 
-## Alternative: patch your own NSO
-
-Install Python 3, then run on macOS or Linux:
-
-```sh
-git clone https://github.com/mikey820/switch-youtube-adblock.git
-cd switch-youtube-adblock
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install -r requirements.txt
-python patch_youtube.py /path/to/your/main.original -o main
-```
-
-On Windows, use:
-
-```powershell
-py -m venv .venv
-.venv\Scripts\activate
-python -m pip install -r requirements.txt
-python patch_youtube.py C:\path\to\main.original -o main
-```
-
-Your original file is never modified. The output must report the patched SHA-256 shown above.
-
-### Install the generated NSO with Atmosphère
-
-1. Fully close YouTube with **HOME → X → Close**.
-2. Keep a backup of any existing override.
-3. Put the generated file at:
-
-   ```text
-   SD:/atmosphere/contents/01003A400C3DA000/exefs/main
-   ```
-
-4. Boot Atmosphère and launch YouTube.
-5. Try several monetized videos, including a longer video that normally has mid-roll ads. Also check the home screen for masthead ads.
+Try several monetized videos, including a longer video that normally has mid-roll ads. Also check the home screen for masthead ads.
 
 Ad inventory varies, so one ad-free video alone is not a useful test.
 
+## Updates
+
+I will keep this patch up to date as YouTube releases new builds. If ad-free YouTube is especially important to you, consider setting **System Settings → System → Auto-Update Software** to **Off** and updating YouTube manually after a compatible patch is released.
+
+The Switch may still offer an update when you launch YouTube while connected to the internet. Do not accept that update until the new build is listed as supported here.
+
 ## Roll back
 
-Close YouTube and rename `SD:/atmosphere/exefs_patches/YouTubeAdBlock` to `YouTubeAdBlock.disabled`. If using the generated-NSO method, disable the title's `exefs` folder instead. No NAND files are changed.
+Close YouTube and rename `SD:/atmosphere/exefs_patches/YouTubeAdBlock` to `YouTubeAdBlock.disabled`. No NAND files are changed.
 
 ## How it works
 
@@ -84,7 +52,7 @@ The implementation is tied to the supported build's addresses and C++ object lay
 
 ## Status and credits
 
-The payload was tested successfully on real Nintendo Switch hardware with YouTube v4 under Atmosphère. The IPS32 package was also verified to produce the exact same mapped process image as the working full-NSO replacement.
+The payload was tested successfully on real Nintendo Switch hardware with YouTube v4 under Atmosphère. The IPS32 package was also verified to produce the exact same in-memory patch as the hardware-tested build.
 
 Created by [mikey820](https://github.com/mikey820), with reverse-engineering and implementation assistance from OpenAI Codex. Not affiliated with Nintendo, Google, YouTube, or the Atmosphère project.
 

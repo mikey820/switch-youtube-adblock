@@ -4,4 +4,3 @@ __pycache__/
 /dist/
 main
 main.*
-!requirements.txt

@@ -9,20 +9,29 @@ from pathlib import Path
 import struct
 import zipfile
 
-from patch_youtube import (
-    HOOK,
-    JAVASCRIPT,
-    PATCHED_TEXT_INSTRUCTION,
-    RO_APPEND_OFFSET,
-    RO_PAYLOAD,
-    SUPPORTED_BUILD_ID,
-    TEXT_APPEND_OFFSET,
-    TEXT_PATCH_OFFSET,
-)
-
-
 NSO_HEADER_SIZE = 0x100
 RO_MEMORY_OFFSET = 0x190F000
+RO_APPEND_OFFSET = 0x12EBD24
+TEXT_PATCH_OFFSET = 0x1E9F90
+TEXT_APPEND_OFFSET = 0x190E9A0
+SUPPORTED_BUILD_ID = "825C18BBF5008500091842636FC2D8DE"
+PATCHED_TEXT_INSTRUCTION = bytes.fromhex("84925c94")
+
+# Compiled AArch64 hook. Its readable source is in src/hook.S.
+HOOK = bytes.fromhex(
+    "ff8301d1fe2f00f960ca42f9600300b4283c80d2e80300f9"
+    "683b80d2e80700f96897009008913491e80b00f9280280d2"
+    "e80f00f9280180d2e81300f96897009008013c91e81700f9"
+    "28008052e83300b9e83700b9e8e30091e1030091e2630091"
+    "e3031faaa7e0a397e8e3403968000036e02740f9cbf7ff97"
+    "60621691fe2f40f9ff830191c0035fd6"
+)
+
+JAVASCRIPT = (Path(__file__).resolve().parent / "src" / "adblock.js").read_text(
+    encoding="ascii"
+).rstrip("\r\n").encode("ascii")
+RO_PAYLOAD = JAVASCRIPT + b"\0[adblock]\0"
+
 PATCH_DIRECTORY = "YouTubeAdBlock"
 IPS_RELATIVE_PATH = Path(
     "atmosphere",
@@ -60,7 +69,7 @@ def deterministic_zip(path: Path, archive_name: str, data: bytes) -> None:
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--version", default="v1.1.0")
+    parser.add_argument("--version", default="v1.1.1")
     args = parser.parse_args()
 
     root = Path(__file__).resolve().parent
