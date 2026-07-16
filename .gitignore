@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+*.nso
+main
+main.*
+!requirements.txt
