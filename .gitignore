@@ -1,6 +1,7 @@
 __pycache__/
 *.pyc
 *.nso
+/dist/
 main
 main.*
 !requirements.txt
