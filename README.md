@@ -4,7 +4,7 @@
 
 A small, build-specific Atmosphère IPS patch for the official YouTube app on Nintendo Switch. It suppresses video ad placements and removes TV masthead/ad-slot renderers while leaving ordinary player and browse data alone.
 
-The repository contains no Nintendo or YouTube executable—only the original 653-byte IPS32 patch and its source.
+The repository contains no Nintendo or YouTube executable. Only the original 653-byte IPS32 patch and its source.
 
 ## Supported build
 
